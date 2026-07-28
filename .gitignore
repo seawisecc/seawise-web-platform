@@ -1,0 +1,17 @@
+node_modules
+.next
+out
+.vercel
+*.tsbuildinfo
+.DS_Store
+
+# Dihasilkan otomatis oleh `npm run client`. Isinya selalu bisa dibangun
+# ulang dari folder clients/, jadi menyimpannya di repo hanya menambah
+# risiko kunci rahasia ikut ter-commit.
+.env
+.env.local
+.env*.local
+
+# Kunci yang melewati seluruh aturan RLS. Tidak pernah masuk repo,
+# tidak pernah masuk Vercel.
+clients/secret.env

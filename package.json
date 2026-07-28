@@ -1,0 +1,16 @@
+{
+  "name": "seawise-web-platform",
+  "private": true,
+  "description": "Akar repo. Aplikasinya ada di template-master/; berkas ini hanya meneruskan perintah agar tidak perlu berpindah folder.",
+  "scripts": {
+    "dev": "npm --prefix template-master run dev",
+    "build": "npm --prefix template-master run build",
+    "start": "npm --prefix template-master run start",
+    "typecheck": "npm --prefix template-master run typecheck",
+    "lint": "npm --prefix template-master run lint",
+    "install:app": "npm --prefix template-master install",
+    "client": "node scripts/use-client.mjs",
+    "new-client": "node scripts/new-client.mjs",
+    "upload-media": "node scripts/upload-media.mjs"
+  }
+}

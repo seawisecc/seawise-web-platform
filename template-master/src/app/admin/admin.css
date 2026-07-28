@@ -1,0 +1,271 @@
+/* ---------------------------------------------------------------------
+   Panel admin punya identitas visualnya sendiri.
+
+   Situs publik memakai warna klien; panel tidak. Panel adalah produk
+   Seawise, dipakai lintas klien, dan harus terasa sama di mana pun.
+   Kalau ia ikut berganti warna tiap klien, ia berhenti terasa seperti
+   alat dan mulai terasa seperti bagian situs yang setengah jadi.
+
+   Caranya: menimpa token --brand-* di dalam .admin-ui saja. Semua kelas
+   utilitas yang sudah ada (.btn, .card, .eyebrow) otomatis ikut netral
+   tanpa perlu ditulis ulang.
+   --------------------------------------------------------------------- */
+
+.admin-ui {
+  --brand-primary: #1c1917;
+  --brand-primary-contrast: #ffffff;
+  --brand-secondary: #57534e;
+  --brand-accent: #2563eb;
+  --brand-accent-contrast: #ffffff;
+  --brand-bg: #fafaf9;
+  --brand-fg: #1c1917;
+  --brand-muted: #f2f1ef;
+  --brand-border: rgba(28, 25, 23, 0.13);
+  --brand-radius: 0.5rem;
+  --brand-motion-duration: 160ms;
+  --brand-reveal-duration: 0ms;
+  --brand-motion-lift: 0px;
+
+  background-color: var(--brand-bg);
+  color: var(--brand-fg);
+  font-family: var(--font-body);
+  min-height: 100dvh;
+}
+
+/* Header dan footer situs klien tidak boleh membingkai panel. Dipilih
+   lewat :has() supaya tidak perlu memaksa seluruh situs jadi dinamis
+   hanya untuk mengetahui halaman mana yang sedang dibuka. */
+body:has(.admin-ui) > header,
+body:has(.admin-ui) > footer {
+  display: none;
+}
+
+body:has(.admin-ui) {
+  background-color: #fafaf9;
+}
+
+/* Bentuk pil cocok untuk situs pemasaran, bukan untuk alat kerja. */
+.admin-ui .btn {
+  border-radius: var(--brand-radius);
+  min-height: 2.5rem;
+  padding-inline: 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.admin-ui .card {
+  background-color: #ffffff;
+  box-shadow: 0 1px 2px rgba(28, 25, 23, 0.05);
+}
+
+.admin-ui .card:hover {
+  transform: none;
+  border-color: var(--brand-border);
+}
+
+.admin-ui h1,
+.admin-ui h2,
+.admin-ui h3 {
+  font-family: var(--font-body);
+  letter-spacing: -0.015em;
+  font-weight: 600;
+}
+
+.admin-ui .eyebrow {
+  color: #78716c;
+  letter-spacing: 0.12em;
+}
+
+/* --- Kontrol formulir ------------------------------------------------ */
+
+.admin-field {
+  width: 100%;
+  border: 1px solid var(--brand-border);
+  border-radius: var(--brand-radius);
+  background-color: #ffffff;
+  padding: 0.625rem 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--brand-fg);
+  transition: border-color 140ms ease, box-shadow 140ms ease;
+}
+
+.admin-field::placeholder { color: #a8a29e; }
+
+.admin-field:focus {
+  outline: none;
+  border-color: var(--brand-accent);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14);
+}
+
+.admin-field:disabled { background-color: #f5f5f4; color: #78716c; }
+
+.admin-label {
+  display: block;
+  margin-bottom: 0.375rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #44403c;
+}
+
+.admin-help {
+  margin-top: 0.375rem;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: #78716c;
+}
+
+/* --- Kartu baris pada editor daftar ---------------------------------- */
+
+.admin-row {
+  border: 1px solid var(--brand-border);
+  border-radius: var(--brand-radius);
+  background-color: #ffffff;
+}
+
+.admin-row-head {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 0.75rem;
+  border-bottom: 1px solid transparent;
+}
+
+.admin-row[open] .admin-row-head {
+  border-bottom-color: var(--brand-border);
+  background-color: #fafaf9;
+  border-radius: var(--brand-radius) var(--brand-radius) 0 0;
+}
+
+.admin-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.875rem;
+  height: 1.875rem;
+  border-radius: 0.375rem;
+  border: 1px solid var(--brand-border);
+  background-color: #ffffff;
+  color: #57534e;
+  font-size: 0.875rem;
+  line-height: 1;
+  transition: background-color 140ms ease, color 140ms ease;
+}
+
+.admin-icon-btn:hover:not(:disabled) { background-color: #f5f5f4; color: #1c1917; }
+.admin-icon-btn:disabled { opacity: 0.35; }
+.admin-icon-btn-danger:hover:not(:disabled) { background-color: #fef2f2; color: #b91c1c; border-color: #fecaca; }
+
+/* --- Lencana status --------------------------------------------------- */
+
+.admin-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.1875rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.admin-badge-live   { background-color: #ecfdf5; color: #065f46; }
+.admin-badge-draft  { background-color: #f5f5f4; color: #57534e; }
+
+.admin-badge::before {
+  content: "";
+  width: 0.375rem;
+  height: 0.375rem;
+  border-radius: 9999px;
+  background-color: currentColor;
+}
+
+/* --- Bilah simpan yang menempel di bawah ------------------------------ */
+
+.admin-savebar {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 2rem;
+  padding: 0.875rem 1rem;
+  border: 1px solid var(--brand-border);
+  border-radius: var(--brand-radius);
+  background-color: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 -1px 12px rgba(28, 25, 23, 0.06);
+}
+
+/* --- Area seret-dan-lepas -------------------------------------------- */
+
+.admin-dropzone {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border: 1.5px dashed var(--brand-border);
+  border-radius: var(--brand-radius);
+  background-color: #fafaf9;
+  transition: border-color 140ms ease, background-color 140ms ease;
+}
+
+.admin-dropzone.has-image { border-style: solid; background-color: #ffffff; }
+
+.admin-dropzone.is-dragging {
+  border-color: var(--brand-accent);
+  background-color: #eff6ff;
+}
+
+.admin-dropzone-wide { aspect-ratio: auto; min-height: 7rem; }
+
+/* --- Panel bagian pada formulir --------------------------------------- */
+
+.admin-panel {
+  border: 1px solid var(--brand-border);
+  border-radius: var(--brand-radius);
+  background-color: #ffffff;
+  box-shadow: 0 1px 2px rgba(28, 25, 23, 0.05);
+}
+
+.admin-panel-head {
+  padding: 0.875rem 1.25rem;
+  border-bottom: 1px solid var(--brand-border);
+  background-color: #fafaf9;
+  border-radius: var(--brand-radius) var(--brand-radius) 0 0;
+}
+
+.admin-panel-body { padding: 1.25rem; }
+
+/* --- Baris isian berkolom ---------------------------------------------
+   admin.css dimuat di luar cascade layer Tailwind, jadi `width: 100%`
+   pada .admin-field selalu mengalahkan utilitas seperti `w-28` atau
+   `flex-1`. Akibatnya kolom harga terhimpit sampai hanya tersisa panah
+   dan tidak bisa diklik. Lebar kolom karena itu ditentukan di sini,
+   sebagai grid, bukan lewat utilitas. */
+
+.admin-pair-row,
+.admin-variant-row {
+  display: grid;
+  gap: 0.5rem;
+  align-items: start;
+}
+
+.admin-pair-row {
+  grid-template-columns: minmax(5rem, 8rem) minmax(5rem, 8rem) minmax(0, 1fr) auto;
+}
+
+.admin-variant-row {
+  grid-template-columns: minmax(5rem, 7rem) minmax(7rem, 1fr) minmax(6rem, 9rem) auto;
+}
+
+@media (max-width: 40rem) {
+  .admin-pair-row { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto; }
+  .admin-pair-row > :nth-child(3) { grid-column: 1 / 3; }
+
+  .admin-variant-row { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto; }
+  .admin-variant-row > :nth-child(3) { grid-column: 1 / 3; }
+}
