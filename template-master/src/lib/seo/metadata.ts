@@ -107,9 +107,19 @@ export async function buildMetadata(pageSlug = "home"): Promise<Metadata> {
       description,
       url: canonical,
       locale: site.locale.replace("-", "_"),
+      // `type` disertakan karena perayap WhatsApp kerap melewatkan gambar
+      // yang tidak menyebutkan tipe MIME-nya, meski gambarnya sendiri valid.
       images: ogImage
         ? [{ url: absoluteUrl(ogImage, SITE_URL), width: 1200, height: 630, alt: title }]
-        : [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: title }],
+        : [
+            {
+              url: `${SITE_URL}/opengraph-image`,
+              width: 1200,
+              height: 630,
+              alt: title,
+              type: "image/png",
+            },
+          ],
     },
     twitter: {
       card: "summary_large_image",

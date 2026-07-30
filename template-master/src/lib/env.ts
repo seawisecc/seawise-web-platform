@@ -20,6 +20,44 @@ function clean(value: string | undefined): string | undefined {
   return value.trim().replace(/\r/g, "").replace(/^["']|["']$/g, "");
 }
 
+/**
+ * Menentukan alamat situs yang dipakai untuk tautan mutlak: canonical,
+ * sitemap, JSON-LD, dan gambar pratinjau tautan.
+ *
+ * Kesalahan yang hampir selalu terjadi: nilai `.env.local` — yang memang
+ * berisi localhost saat pengembangan — ikut tersalin ke Vercel. Build tetap
+ * lolos karena `http://localhost:3000` itu URL yang sah, tapi WhatsApp lalu
+ * diminta mengambil gambar dari komputer si pembuat. Pratinjaunya kosong,
+ * tanpa satu pun pesan kesalahan.
+ *
+ * Karena itu di Vercel nilai localhost diabaikan dan diganti dengan domain
+ * produksi yang Vercel sediakan sendiri. Satu kelas bug hilang untuk semua
+ * klien berikutnya, bukan cuma untuk yang ini.
+ */
+function resolveSiteUrl(configured: string | undefined): string | undefined {
+  const onVercel = Boolean(process.env.VERCEL);
+  const isLocalhost = configured
+    ? /^https?:\/\/(localhost|127\.0\.0\.1)(:|\/|$)/i.test(configured)
+    : false;
+
+  if (configured && !(onVercel && isLocalhost)) return configured;
+
+  // VERCEL_PROJECT_PRODUCTION_URL menunjuk domain produksi dan tidak berubah
+  // tiap deploy; VERCEL_URL menunjuk deployment ini saja, jadi hanya dipakai
+  // sebagai cadangan terakhir.
+  const host =
+    clean(process.env.VERCEL_PROJECT_PRODUCTION_URL) || clean(process.env.VERCEL_URL);
+
+  if (!host) return configured;
+
+  const resolved = `https://${host}`;
+  console.warn(
+    `[env] NEXT_PUBLIC_SITE_URL berisi "${configured ?? "(kosong)"}" — dialihkan ke ${resolved}. ` +
+      "Isi variabel itu di Vercel dengan domain aslinya agar tidak bergantung pada nilai cadangan ini.",
+  );
+  return resolved;
+}
+
 const schema = z.object({
   NEXT_PUBLIC_SUPABASE_URL: z.string().url(),
   NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: z.string().min(20),
@@ -34,7 +72,7 @@ const parsed = schema.safeParse({
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
   ),
   NEXT_PUBLIC_SITE_ID: clean(process.env.NEXT_PUBLIC_SITE_ID),
-  NEXT_PUBLIC_SITE_URL: clean(process.env.NEXT_PUBLIC_SITE_URL),
+  NEXT_PUBLIC_SITE_URL: resolveSiteUrl(clean(process.env.NEXT_PUBLIC_SITE_URL)),
 });
 
 if (!parsed.success) {
