@@ -18,7 +18,7 @@ export function SharedNotice({ type, pages }: { type: string; pages: string[] })
         <p className="mt-1.5 text-sm text-stone-600">
           Foto, harga, dan urutan di sini adalah satu-satunya salinan.
           {others.length > 0
-            ? ` Halaman ${others.join(", ")} membacanya langsung — tidak ada yang perlu diunggah dua kali.`
+            ? ` Halaman ${others.join(", ")} membacanya langsung, jadi tidak ada yang perlu diunggah dua kali.`
             : ""}{" "}
           Yang berbeda per bahasa hanya teks, lewat kolom bertanda
           &ldquo;(English)&rdquo;.

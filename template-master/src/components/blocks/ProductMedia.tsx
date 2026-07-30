@@ -72,7 +72,7 @@ export function ProductMedia({
           <div key={`${img.url}-${i}`} className="relative h-full w-full shrink-0 snap-center">
             <SafeImage
               url={img.url!}
-              alt={img.alt || `${name} — foto ${i + 1}`}
+              alt={img.alt || `${name}, foto ${i + 1}`}
               fill
               priority={priority && i === 0}
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"

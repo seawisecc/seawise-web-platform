@@ -118,7 +118,7 @@ export function ImageField({
 
               {url && !(value.alt ?? "").trim() ? (
                 <p className="text-xs text-amber-700">
-                  Teks alternatif masih kosong — gambar ini tidak akan terbaca Google.
+                  Teks alternatif masih kosong, gambar ini tidak akan terbaca Google.
                 </p>
               ) : null}
             </>

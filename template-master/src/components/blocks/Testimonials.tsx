@@ -14,7 +14,7 @@ export function Testimonials({ data }: { data: BlockDataMap["testimonials"] }) {
             <blockquote className="prose-body text-lg italic">&ldquo;{t.quote}&rdquo;</blockquote>
             <footer className="mt-4 text-sm">
               <span className="font-semibold">{t.author}</span>
-              {t.role ? <span className="opacity-60"> — {t.role}</span> : null}
+              {t.role ? <span className="opacity-60">, {t.role}</span> : null}
             </footer>
           </li>
         ))}

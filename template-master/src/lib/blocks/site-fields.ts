@@ -23,7 +23,7 @@ export const CONTACT_FIELDS: FieldDescriptor[] = [
     label: "Nomor WhatsApp",
     kind: "text",
     placeholder: "081234567890",
-    help: "Boleh diawali 0 atau 62 — keduanya diterima dan diperbaiki otomatis.",
+    help: "Boleh diawali 0 atau 62, keduanya diterima dan diperbaiki otomatis.",
   },
   { key: "street", label: "Alamat jalan", kind: "text" },
   { key: "city", label: "Kota", kind: "text" },

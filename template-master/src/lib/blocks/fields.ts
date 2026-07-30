@@ -157,7 +157,7 @@ export const BLOCK_FIELDS: Record<BlockType, FieldDescriptor[]> = {
           key: "details",
           label: "Rincian",
           kind: "pairs",
-          help: "Untuk parfum: Atas / Tengah / Dasar. Kolom ketiga adalah label versi Inggris — isinya sendiri tidak perlu diterjemahkan.",
+          help: "Untuk parfum: Atas / Tengah / Dasar. Kolom ketiga adalah label versi Inggris. Isinya sendiri tidak perlu diterjemahkan.",
         },
         { key: "sku", label: "Kode produk (SKU)", kind: "text", placeholder: "mis. LEU-AMS" },
         {

@@ -81,7 +81,7 @@ export default async function AdminPage() {
               </div>
               <p className="mt-1 text-xs text-stone-500">
                 {pageSlug === PRIMARY_PAGE
-                  ? "Termasuk produk dan galeri — foto serta harga di sini dipakai semua bahasa."
+                  ? "Termasuk produk dan galeri. Foto serta harga di sini dipakai semua bahasa."
                   : "Hanya bagian yang isinya berbeda per bahasa. Produk dan galeri diambil dari Beranda."}
               </p>
             </div>
