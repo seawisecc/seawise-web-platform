@@ -49,8 +49,28 @@ export default async function OpengraphImage() {
     photo = "";
   }
 
+  // Fotonya diambil sendiri lebih dulu, bukan diserahkan ke <img>.
+  //
+  // Kalau pengambilan itu dilakukan di dalam ImageResponse dan gagal — server
+  // gambar lambat, berkasnya terhapus — seluruh rute ikut gagal dan tautan
+  // tampil tanpa gambar sama sekali. Diambil di sini, kegagalannya cukup
+  // membuat kartu tampil tanpa foto: tetap rapi, tetap terbaca.
+  let photoData = "";
+  if (photo) {
+    try {
+      const res = await fetch(photo, { signal: AbortSignal.timeout(4000) });
+      const mime = res.headers.get("content-type") ?? "";
+      if (res.ok && mime.startsWith("image/")) {
+        const buffer = Buffer.from(await res.arrayBuffer());
+        photoData = `data:${mime};base64,${buffer.toString("base64")}`;
+      }
+    } catch {
+      photoData = "";
+    }
+  }
+
   const onPrimary = contrastText(primary);
-  const hasPhoto = Boolean(photo);
+  const hasPhoto = Boolean(photoData);
 
   return new ImageResponse(
     (
@@ -130,7 +150,7 @@ export default async function OpengraphImage() {
         {hasPhoto ? (
           <div style={{ display: "flex", width: 480, height: "100%", background: muted }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={photo} alt="" width={480} height={630} style={{ objectFit: "cover" }} />
+            <img src={photoData} alt="" width={480} height={630} style={{ objectFit: "cover" }} />
           </div>
         ) : null}
       </div>

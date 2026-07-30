@@ -75,7 +75,10 @@ export async function buildMetadata(pageSlug = "home"): Promise<Metadata> {
   const canonicalPath = isHome ? "/" : `/${pageSlug}`;
   const canonical = `${SITE_URL}${canonicalPath}`;
 
+  // Gambar yang diunggah klien. Kalau kosong, pratinjau memakai gambar yang
+  // dihasilkan app/opengraph-image.tsx.
   const ogImage = page?.seo?.og_image || site.seo.default_og_image;
+  const customOgImage = ogImage ? absoluteUrl(ogImage, SITE_URL) : null;
   const noindex = site.seo.noindex || page?.seo?.noindex === true;
 
   return {
@@ -107,26 +110,23 @@ export async function buildMetadata(pageSlug = "home"): Promise<Metadata> {
       description,
       url: canonical,
       locale: site.locale.replace("-", "_"),
-      // `type` disertakan karena perayap WhatsApp kerap melewatkan gambar
-      // yang tidak menyebutkan tipe MIME-nya, meski gambarnya sendiri valid.
-      images: ogImage
-        ? [{ url: absoluteUrl(ogImage, SITE_URL), width: 1200, height: 630, alt: title }]
-        : [
-            {
-              url: `${SITE_URL}/opengraph-image`,
-              width: 1200,
-              height: 630,
-              alt: title,
-              type: "image/png",
-            },
-          ],
+      // Sengaja TIDAK diisi saat klien belum mengunggah gambarnya sendiri.
+      //
+      // Next.js sudah memasang og:image otomatis untuk app/opengraph-image.tsx,
+      // memakai alamat sebenarnya beserta penanda cache-nya. Menuliskan alamat
+      // itu manual justru menimpanya dengan tebakan — dan tebakan yang meleset
+      // membuat pratinjau tampil tanpa gambar, tanpa satu pun pesan kesalahan.
+      ...(customOgImage
+        ? { images: [{ url: customOgImage, width: 1200, height: 630, alt: title }] }
+        : {}),
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
       site: site.seo.twitter_handle ?? undefined,
-      images: ogImage ? [absoluteUrl(ogImage, SITE_URL)] : [`${SITE_URL}/opengraph-image`],
+      // Tanpa twitter-image tersendiri, Next memakai opengraph-image yang sama.
+      ...(customOgImage ? { images: [customOgImage] } : {}),
     },
     // Ikon diambil dari data klien, bukan berkas statis di repo — satu
     // codebase melayani banyak klien, jadi favicon tidak boleh ikut build.
