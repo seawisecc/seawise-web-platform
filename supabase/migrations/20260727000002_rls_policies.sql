@@ -238,3 +238,11 @@ grant select, insert, update         on public.leads          to authenticated;
 -- klien tidak bisa mengganti tema atau menaikkan paketnya sendiri, bahkan
 -- lewat panggilan langsung ke API Supabase.
 grant update (name, business_info, seo_config) on public.sites to authenticated;
+
+-- service_role: dipakai skrip admin (scripts/*.mjs) dan edge function.
+-- Sejak 30 Okt 2026 Supabase tidak lagi memberi hak Data API otomatis
+-- ke tabel baru, jadi hak service_role juga ditulis eksplisit di sini.
+grant select, insert, update, delete
+  on public.sites, public.profiles, public.content_blocks,
+     public.pages, public.media, public.leads
+  to service_role;
